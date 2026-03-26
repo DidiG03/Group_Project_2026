@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="page-title mb-0">Teams</h2>
+    <div>
+        <a class="btn btn-primary" href="{% url 'team_create' %}">Add Team</a>
+        <a class="btn btn-outline-primary" href="{% url 'team_member_create' %}">Add Member</a>
+        <a class="btn btn-outline-primary" href="{% url 'team_dependency_create' %}">Add Dependency</a>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <form method="get" class="input-group mb-3">
+            <input type="text" class="form-control" name="q" placeholder="Search by team, department, manager" value="{{ request.GET.q }}">
+            <button class="btn btn-secondary">Search</button>
+        </form>
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead>
+                <tr>
+                    <th>Team</th>
+                    <th>Department</th>
+                    <th>Manager</th>
+                    <th>Engineers</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for team in teams %}
+                    <tr>
+                        <td><a href="{% url 'team_detail' team.pk %}">{{ team.name }}</a></td>
+                        <td>{{ team.department.name }}</td>
+                        <td>{{ team.manager.get_full_name|default:"-" }}</td>
+                        <td>{{ team.engineer_count }}</td>
+                        <td>
+                            {% if team.status == "active" %}
+                                <span class="badge-pill-soft badge-soft-success">Active</span>
+                            {% else %}
+                                <span class="badge-pill-soft badge-soft-danger">{{ team.get_status_display }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-outline-secondary" href="{% url 'team_update' team.pk %}">Edit</a>
+                            <a class="btn btn-sm btn-outline-danger" href="{% url 'team_delete' team.pk %}">Delete</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6">
+                            <div class="empty-state">
+                                <i class="bi bi-people"></i>
+                                No teams yet.
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

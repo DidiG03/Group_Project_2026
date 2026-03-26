@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="page-title mb-0">Departments</h2>
+    <div>
+        <a class="btn btn-primary" href="{% url 'department_create' %}">Add Department</a>
+        <a class="btn btn-outline-primary" href="{% url 'teamtype_create' %}">Add Team Type</a>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Leader</th>
+                    <th>Specialisation</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for department in departments %}
+                    <tr>
+                        <td>{{ department.name }}</td>
+                        <td>{{ department.leader_name }}</td>
+                        <td>{{ department.specialisation }}</td>
+                        <td>
+                            {% if department.is_active %}
+                                <span class="badge-pill-soft badge-soft-success">Active</span>
+                            {% else %}
+                                <span class="badge-pill-soft badge-soft-danger">Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-outline-secondary" href="{% url 'department_update' department.pk %}">Edit</a>
+                            <a class="btn btn-sm btn-outline-danger" href="{% url 'department_delete' department.pk %}">Delete</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <i class="bi bi-diagram-3"></i>
+                                No departments created yet.
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="page-title mb-0">Schedule</h2>
+    <a class="btn btn-primary" href="{% url 'meeting_create' %}">Schedule Meeting</a>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header card-header-soft"><h5 class="mb-0">Upcoming</h5></div>
+            <ul class="list-group list-group-flush">
+                {% for meeting in upcoming %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>{{ meeting.scheduled_for }} - {{ meeting.title }} ({{ meeting.team.name }})</span>
+                        <span>
+                            <a class="btn btn-sm btn-outline-secondary" href="{% url 'meeting_update' meeting.pk %}">Edit</a>
+                            <a class="btn btn-sm btn-outline-danger" href="{% url 'meeting_delete' meeting.pk %}">Delete</a>
+                        </span>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">
+                        <div class="empty-state">
+                            <i class="bi bi-calendar2-event"></i>
+                            No upcoming meetings.
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="card h-100">
+            <div class="card-header card-header-soft"><h5 class="mb-0">This Week</h5></div>
+            <ul class="list-group list-group-flush">
+                {% for meeting in weekly %}
+                    <li class="list-group-item">{{ meeting.scheduled_for }} - {{ meeting.title }}</li>
+                {% empty %}
+                    <li class="list-group-item">No weekly meetings.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="card h-100">
+            <div class="card-header card-header-soft"><h5 class="mb-0">This Month</h5></div>
+            <ul class="list-group list-group-flush">
+                {% for meeting in monthly %}
+                    <li class="list-group-item">{{ meeting.scheduled_for }} - {{ meeting.title }}</li>
+                {% empty %}
+                    <li class="list-group-item">No monthly meetings.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

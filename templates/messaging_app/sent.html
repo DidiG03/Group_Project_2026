@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Sent Messages</h2>
+<ul class="list-group">
+    {% for message in messages %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span><strong>{{ message.subject }}</strong> - {{ message.sent_at|default:message.created_at }}</span>
+            <a class="btn btn-sm btn-outline-danger" href="{% url 'message_delete' message.pk %}">Delete</a>
+        </li>
+    {% empty %}
+        <li class="list-group-item">No sent messages.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="page-title mb-0">Inbox</h2>
+    <div>
+        <a class="btn btn-primary" href="{% url 'message_create' %}">New Message</a>
+        <a class="btn btn-outline-secondary" href="{% url 'sent' %}">Sent</a>
+        <a class="btn btn-outline-secondary" href="{% url 'draft' %}">Draft</a>
+    </div>
+</div>
+<div class="card">
+    <ul class="list-group list-group-flush">
+        {% for message in messages %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>{{ message.subject }}</strong><br>
+                    <span class="text-muted">From: {{ message.sender.username }}</span><br>
+                    {{ message.body|truncatechars:140 }}
+                </div>
+                <a class="btn btn-sm btn-outline-danger" href="{% url 'message_delete' message.pk %}">Delete</a>
+            </li>
+        {% empty %}
+            <li class="list-group-item">
+                <div class="empty-state">
+                    <i class="bi bi-envelope"></i>
+                    Inbox is empty.
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

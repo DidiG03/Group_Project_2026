@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="page-title mb-3">Notifications</h2>
+<div class="card">
+    <ul class="list-group list-group-flush">
+        {% for notification in notifications %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>{{ notification.title }}</strong><br>
+                    <small>{{ notification.body }}</small><br>
+                    <small class="text-muted">{{ notification.created_at }}</small>
+                </div>
+                {% if not notification.is_read %}
+                    <form method="post" action="{% url 'notification_read' notification.pk %}">
+                        {% csrf_token %}
+                        <button class="btn btn-sm btn-outline-primary" type="submit">Mark read</button>
+                    </form>
+                {% else %}
+                    <span class="badge bg-success">Read</span>
+                {% endif %}
+            </li>
+        {% empty %}
+            <li class="list-group-item">No notifications yet.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="page-title mb-0">Reports</h2>
+    <div>
+        <a href="{% url 'report_csv' %}" class="btn btn-outline-primary">Export CSV (Excel)</a>
+        <a href="{% url 'report_pdf' %}" class="btn btn-outline-danger">Export PDF</a>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card card-body metric">
+            <div class="metric-title">Total Teams</div>
+            <div class="metric-value">{{ team_count }}</div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card card-body">
+            <h5>Teams Without Manager</h5>
+            <ul class="mb-0">
+                {% for team in teams_without_manager %}
+                    <li>{{ team.name }}</li>
+                {% empty %}
+                    <li>All teams currently have managers assigned.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<h5>Summary Table</h5>
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead>
+                <tr>
+                    <th>Team</th>
+                    <th>Department</th>
+                    <th>Manager</th>
+                    <th>Engineers</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for team in summary_rows %}
+                    <tr>
+                        <td>{{ team.name }}</td>
+                        <td>{{ team.department.name }}</td>
+                        <td>{{ team.manager.get_full_name|default:"-" }}</td>
+                        <td>{{ team.engineer_count }}</td>
+                        <td>{{ team.get_status_display }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

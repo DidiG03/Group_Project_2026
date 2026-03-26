@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Organization Structure</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <h4>Department -> Teams</h4>
+        {% for department in departments %}
+            <div class="card mb-3">
+                <div class="card-header">{{ department.name }}</div>
+                <ul class="list-group list-group-flush">
+                    {% for team in department.teams.all %}
+                        <li class="list-group-item">{{ team.name }}</li>
+                    {% empty %}
+                        <li class="list-group-item">No teams in this department.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="col-md-6">
+        <h4>Team Relationships</h4>
+        <ul class="list-group mb-3">
+            {% for dep in dependencies %}
+                <li class="list-group-item">
+                    {{ dep.from_team.name }} -> {{ dep.to_team.name }} ({{ dep.get_relation_type_display }})
+                </li>
+            {% empty %}
+                <li class="list-group-item">No dependencies recorded.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

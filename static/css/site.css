@@ -1,0 +1,227 @@
+:root {
+    --bg: #f3f7ff;
+    --surface: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --primary: #3366ff;
+    --primary-dark: #1f4fd6;
+    --danger-soft: #ffe8ec;
+    --success-soft: #e8fff2;
+}
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background:
+        radial-gradient(circle at 20% 10%, #dfe9ff 0%, rgba(223, 233, 255, 0) 40%),
+        radial-gradient(circle at 85% 10%, #d8f8ee 0%, rgba(216, 248, 238, 0) 40%),
+        var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+a {
+    color: var(--primary-dark);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--primary);
+}
+
+.app-shell {
+    border-radius: 20px;
+}
+
+.app-navbar {
+    background: linear-gradient(120deg, #101828 0%, #172554 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    margin: 1rem auto 1.25rem;
+    max-width: 1280px;
+    box-shadow: 0 14px 30px rgba(16, 24, 40, 0.25);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.85) !important;
+    border-radius: 10px;
+    padding: 0.4rem 0.65rem !important;
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff !important;
+}
+
+.nav-logout-btn {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+}
+
+.nav-link.active {
+    background: rgba(255, 255, 255, 0.17);
+    color: #fff !important;
+}
+
+.app-content {
+    max-width: 1280px;
+}
+
+.page-title {
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    margin-bottom: 1rem;
+}
+
+.card {
+    border: 1px solid #e5ecf6;
+    border-radius: 14px;
+    box-shadow: 0 6px 22px rgba(15, 23, 42, 0.06);
+}
+
+.card-header-soft {
+    background: #f6f8ff;
+    border-bottom: 1px solid #e5ecf6;
+    border-radius: 14px 14px 0 0;
+}
+
+.metric {
+    border-left: 5px solid var(--primary);
+}
+
+.metric-title {
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+.metric-value {
+    font-size: 1.95rem;
+    font-weight: 700;
+}
+
+.btn {
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.btn-primary {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+.table {
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.table thead th {
+    background: #eef3ff;
+    color: #24324b;
+    border-bottom: 1px solid #dfe7f5;
+}
+
+.table tbody tr:hover {
+    background: #f8fbff;
+}
+
+.list-group-item {
+    border-color: #e8eef7;
+}
+
+input.form-control,
+textarea.form-control,
+select.form-select,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="url"],
+input[type="datetime-local"],
+textarea,
+select {
+    border-radius: 10px !important;
+    border: 1px solid #d7e2f2 !important;
+    box-shadow: none !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #9db7ff !important;
+    box-shadow: 0 0 0 0.2rem rgba(51, 102, 255, 0.13) !important;
+}
+
+form p {
+    margin-bottom: 0.8rem;
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.alert {
+    border-radius: 12px;
+    border: none;
+}
+
+.alert-info {
+    background: #eaf3ff;
+    color: #1e4d8c;
+}
+
+.badge-pill-soft {
+    padding: 0.35rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.badge-soft-success {
+    background: var(--success-soft);
+    color: #0f7a45;
+}
+
+.badge-soft-danger {
+    background: var(--danger-soft);
+    color: #a72744;
+}
+
+.auth-card {
+    border-radius: 18px;
+    border: 1px solid #dfe7f5;
+    box-shadow: 0 16px 34px rgba(15, 23, 42, 0.1);
+}
+
+.auth-card .card-header {
+    background: transparent;
+    border-bottom: 1px solid #edf2fb;
+    font-weight: 700;
+}
+
+.auth-screen {
+    padding-top: 3rem;
+}
+
+.empty-state {
+    color: var(--muted);
+    text-align: center;
+    padding: 1.5rem 1rem;
+}
+
+.empty-state i {
+    font-size: 1.4rem;
+    display: block;
+    margin-bottom: 0.25rem;
+}

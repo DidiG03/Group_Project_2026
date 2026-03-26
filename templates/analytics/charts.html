@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="page-title mb-0">Data Visualisation</h2>
+<p class="text-muted mb-3">Charts based on department and manager/team data.</p>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="card card-body">
+            <h5>Department vs Number of Teams</h5>
+            <canvas id="departmentChart"></canvas>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-body">
+            <h5>Manager vs Number of Teams</h5>
+            <canvas id="managerChart"></canvas>
+        </div>
+    </div>
+</div>
+
+{{ department_labels|json_script:"department-labels-data" }}
+{{ department_values|json_script:"department-values-data" }}
+{{ manager_labels|json_script:"manager-labels-data" }}
+{{ manager_values|json_script:"manager-values-data" }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const departmentLabels = JSON.parse(document.getElementById("department-labels-data").textContent);
+    const departmentValues = JSON.parse(document.getElementById("department-values-data").textContent);
+    const managerLabels = JSON.parse(document.getElementById("manager-labels-data").textContent);
+    const managerValues = JSON.parse(document.getElementById("manager-values-data").textContent);
+
+    new Chart(document.getElementById("departmentChart"), {
+        type: "bar",
+        data: {
+            labels: departmentLabels,
+            datasets: [{
+                label: "Teams",
+                data: departmentValues,
+                backgroundColor: "rgba(13, 110, 253, 0.7)"
+            }]
+        }
+    });
+
+    new Chart(document.getElementById("managerChart"), {
+        type: "pie",
+        data: {
+            labels: managerLabels,
+            datasets: [{
+                data: managerValues,
+                backgroundColor: ["#0d6efd", "#198754", "#ffc107", "#dc3545", "#6f42c1", "#20c997"]
+            }]
+        }
+    });
+</script>
+{% endblock %}

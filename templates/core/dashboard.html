@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="page-title mb-0">Dashboard</h2>
+    <span class="text-muted">Welcome, {{ user.first_name|default:user.username }}</span>
+</div>
+
+{% if compliance_notes %}
+    <div class="alert alert-warning">
+        <strong>Data checks:</strong>
+        <ul class="mb-0">
+            {% for note in compliance_notes %}
+                <li>{{ note }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card card-body metric">
+            <div class="metric-title">Departments</div>
+            <div class="metric-value">{{ department_count }}</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card card-body metric">
+            <div class="metric-title">Teams</div>
+            <div class="metric-value">{{ team_count }}</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card card-body metric">
+            <div class="metric-title">Unread Notifications</div>
+            <div class="metric-value">{{ unread_notifications_count }}</div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-body mb-4">
+    <form method="get" class="row g-2">
+        <div class="col-md-7">
+            <input type="text" class="form-control" name="q" placeholder="Search teams, departments, managers" value="{{ query }}">
+        </div>
+        <div class="col-md-3">
+            <select name="view" class="form-select">
+                <option value="grid" {% if display_mode == "grid" %}selected{% endif %}>Grid view</option>
+                <option value="list" {% if display_mode == "list" %}selected{% endif %}>List view</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary w-100" type="submit">Search</button>
+        </div>
+    </form>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-4">
+        <div class="card h-100">
+            <div class="card-header card-header-soft"><h5 class="mb-0">Teams</h5></div>
+            <div class="card-body">
+                {% if display_mode == "grid" %}
+                    <div class="row row-cols-1 g-2">
+                        {% for team in teams %}
+                            <div class="col">
+                                <div class="card card-body p-2">
+                                    <strong><a href="{% url 'team_detail' team.pk %}">{{ team.name }}</a></strong>
+                                    <small class="text-muted">{{ team.department.name }}</small>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <div class="col"><div class="card card-body p-2">No teams found.</div></div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <ul class="list-group">
+                        {% for team in teams %}
+                            <li class="list-group-item"><a href="{% url 'team_detail' team.pk %}">{{ team.name }}</a></li>
+                        {% empty %}
+                            <li class="list-group-item">No teams found.</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card h-100">
+            <div class="card-header card-header-soft"><h5 class="mb-0">Departments</h5></div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for department in departments %}
+                        <li class="list-group-item">{{ department.name }} <span class="text-muted">(Lead: {{ department.leader_name }})</span></li>
+                    {% empty %}
+                        <li class="list-group-item">No departments found.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card h-100">
+            <div class="card-header card-header-soft"><h5 class="mb-0">Managers</h5></div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for first_name, last_name, email in managers %}
+                        <li class="list-group-item">{{ first_name }} {{ last_name }} <span class="text-muted">- {{ email }}</span></li>
+                    {% empty %}
+                        <li class="list-group-item">No managers found.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

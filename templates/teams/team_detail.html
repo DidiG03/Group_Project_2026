@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="page-title mb-0">{{ team.name }}</h2>
+    <div>
+        <a class="btn btn-outline-primary btn-sm" href="{% url 'message_create' %}?team={{ team.pk }}">Email Team</a>
+        <a class="btn btn-outline-secondary btn-sm" href="{% url 'meeting_create' %}?team={{ team.pk }}">Schedule Meeting</a>
+        <a class="btn btn-outline-dark btn-sm" href="{% url 'team_update' team.pk %}">Edit Team</a>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header card-header-soft"><h5 class="mb-0">Overview</h5></div>
+            <div class="card-body">
+                <p><strong>Department:</strong> {{ team.department.name }}</p>
+                <p><strong>Manager:</strong> {{ team.manager.get_full_name|default:"Not assigned" }}</p>
+                <p><strong>Mission:</strong> {{ team.mission }}</p>
+                <p><strong>Responsibilities:</strong> {{ team.responsibilities }}</p>
+                <p><strong>Contact:</strong> {{ team.contact_channel }}</p>
+                <p class="mb-0"><strong>Repository:</strong> <a href="{{ team.repository_url }}">{{ team.repository_url }}</a></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header card-header-soft"><h5 class="mb-0">Status History</h5></div>
+            <ul class="list-group list-group-flush">
+                {% for row in team.status_history.all %}
+                    <li class="list-group-item">{{ row.changed_at }}: {{ row.old_status }} -> {{ row.new_status }}</li>
+                {% empty %}
+                    <li class="list-group-item">No status changes recorded yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mt-1">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header card-header-soft"><h5 class="mb-0">Team Members</h5></div>
+            <ul class="list-group list-group-flush">
+                {% for member in members %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>{{ member.full_name }} - {{ member.role }} ({{ member.skills }})</span>
+                        <a class="btn btn-sm btn-outline-danger" href="{% url 'team_member_delete' member.pk %}">Delete</a>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">No members added.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header card-header-soft"><h5 class="mb-0">Dependencies</h5></div>
+            <ul class="list-group list-group-flush">
+                {% for dep in dependencies_from %}
+                    <li class="list-group-item">{{ dep.get_relation_type_display }} -> {{ dep.to_team.name }} {% if dep.notes %}({{ dep.notes }}){% endif %}</li>
+                {% empty %}
+                    <li class="list-group-item">No outgoing dependencies.</li>
+                {% endfor %}
+                {% for dep in dependencies_to %}
+                    <li class="list-group-item">{{ dep.from_team.name }} -> {{ dep.get_relation_type_display }} (this team)</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
