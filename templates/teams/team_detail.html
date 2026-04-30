@@ -15,7 +15,9 @@
             <div class="card-header card-header-soft"><h5 class="mb-0">Overview</h5></div>
             <div class="card-body">
                 <p><strong>Department:</strong> {{ team.department.name }}</p>
-                <p><strong>Manager:</strong> {{ team.manager.get_full_name|default:"Not assigned" }}</p>
+                <p><strong>Team Type:</strong> {{ team.team_type.name|default:"Not set" }}</p>
+                <p><strong>Status:</strong> <span class="badge-pill-soft {% if team.status == 'active' %}badge-soft-success{% else %}badge-soft-danger{% endif %}">{{ team.get_status_display }}</span></p>
+                <p><strong>Manager:</strong> {{ team.manager.get_full_name|default:"Not assigned" }}{% if team.manager.email %} <span class="text-muted">({{ team.manager.email }})</span>{% endif %}</p>
                 <p><strong>Mission:</strong> {{ team.mission }}</p>
                 <p><strong>Responsibilities:</strong> {{ team.responsibilities }}</p>
                 <p><strong>Contact:</strong> {{ team.contact_channel }}</p>

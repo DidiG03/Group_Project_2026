@@ -1,5 +1,7 @@
 from django import forms
 
+from core.form_helpers import apply_bootstrap_classes
+
 from .models import Meeting
 
 
@@ -12,3 +14,7 @@ class MeetingForm(forms.ModelForm):
     class Meta:
         model = Meeting
         fields = ["team", "title", "scheduled_for", "platform", "message"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        apply_bootstrap_classes(self)

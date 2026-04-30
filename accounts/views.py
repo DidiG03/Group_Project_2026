@@ -6,7 +6,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
 
-from .forms import ProfileForm, SignUpForm
+from .forms import ProfileForm, SignUpForm, StyledPasswordChangeForm, StyledPasswordResetForm
 
 
 class SignUpView(CreateView):
@@ -36,6 +36,7 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
 class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
     template_name = "accounts/password_change.html"
+    form_class = StyledPasswordChangeForm
     success_url = reverse_lazy("profile")
 
     def form_valid(self, form):
@@ -45,6 +46,7 @@ class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
 
 class CustomPasswordResetView(PasswordResetView):
     template_name = "accounts/password_reset.html"
+    form_class = StyledPasswordResetForm
     email_template_name = "accounts/password_reset_email.txt"
     success_url = reverse_lazy("password_reset_done")
 

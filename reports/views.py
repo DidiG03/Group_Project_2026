@@ -76,6 +76,3 @@ class TeamSummaryPdfView(LoginRequiredMixin, View):
         response = HttpResponse(buffer.getvalue(), content_type="application/pdf")
         response["Content-Disposition"] = 'attachment; filename="team_summary.pdf"'
         return response
-from django.shortcuts import render
-
-# Create your views here.

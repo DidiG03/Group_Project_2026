@@ -1,5 +1,7 @@
 from django import forms
 
+from core.form_helpers import apply_bootstrap_classes
+
 from .models import Team, TeamDependency, TeamMember
 
 
@@ -17,6 +19,10 @@ class TeamForm(forms.ModelForm):
             "repository_url",
             "status",
         ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        apply_bootstrap_classes(self)
 
     def clean(self):
         cleaned_data = super().clean()
@@ -37,8 +43,16 @@ class TeamMemberForm(forms.ModelForm):
         model = TeamMember
         fields = ["team", "full_name", "email", "role", "skills"]
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        apply_bootstrap_classes(self)
+
 
 class TeamDependencyForm(forms.ModelForm):
     class Meta:
         model = TeamDependency
         fields = ["from_team", "to_team", "relation_type", "notes"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        apply_bootstrap_classes(self)

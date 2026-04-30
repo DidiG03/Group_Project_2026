@@ -6,7 +6,7 @@ from django.views.generic import ListView, TemplateView, View
 from organization.models import Department
 from teams.models import Team
 
-from .models import Notification
+from .models import AuditLog, Notification
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
@@ -67,6 +67,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context["departments"] = departments[:10]
         context["managers"] = managers[:10]
         context["team_count"] = Team.objects.count()
+        context["active_team_count"] = Team.objects.filter(status=Team.TeamStatus.ACTIVE).count()
         context["department_count"] = Department.objects.count()
         context["compliance_notes"] = compliance_notes
         context["unread_notifications_count"] = Notification.objects.filter(
@@ -87,6 +88,15 @@ class MarkNotificationReadView(LoginRequiredMixin, View):
     def post(self, request, pk):
         Notification.objects.filter(pk=pk, user=request.user).update(is_read=True)
         return redirect("notifications")
+
+
+class AuditLogListView(LoginRequiredMixin, ListView):
+    template_name = "core/audit_log.html"
+    context_object_name = "audit_logs"
+    paginate_by = 50
+
+    def get_queryset(self):
+        return AuditLog.objects.select_related("actor").all()
 
 
 def custom_page_not_found(request, exception=None):

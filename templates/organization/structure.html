@@ -1,34 +1,76 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Organization Structure</h2>
+<h2 class="page-title">Organisation Structure</h2>
 
-<div class="row">
-    <div class="col-md-6">
-        <h4>Department -> Teams</h4>
-        {% for department in departments %}
-            <div class="card mb-3">
-                <div class="card-header">{{ department.name }}</div>
-                <ul class="list-group list-group-flush">
-                    {% for team in department.teams.all %}
-                        <li class="list-group-item">{{ team.name }}</li>
-                    {% empty %}
-                        <li class="list-group-item">No teams in this department.</li>
-                    {% endfor %}
-                </ul>
+<div class="row g-3">
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header card-header-soft"><h5 class="mb-0">Departments &rarr; Teams</h5></div>
+            <div class="card-body">
+                {% for department in departments %}
+                    <div class="mb-3">
+                        <div class="fw-bold">{{ department.name }}
+                            <span class="text-muted small">- {{ department.specialisation }} (Lead: {{ department.leader_name }})</span>
+                        </div>
+                        <ul class="list-group list-group-flush mt-1">
+                            {% for team in department.teams.all %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span><a href="{% url 'team_detail' team.pk %}">{{ team.name }}</a>
+                                        {% if team.team_type %}<span class="text-muted small">({{ team.team_type.name }})</span>{% endif %}
+                                    </span>
+                                    <span class="badge-pill-soft {% if team.status == 'active' %}badge-soft-success{% else %}badge-soft-danger{% endif %}">
+                                        {{ team.get_status_display }}
+                                    </span>
+                                </li>
+                            {% empty %}
+                                <li class="list-group-item text-muted">No teams in this department.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% empty %}
+                    <div class="empty-state">
+                        <i class="bi bi-diagram-3"></i>
+                        No departments yet.
+                    </div>
+                {% endfor %}
             </div>
-        {% endfor %}
+        </div>
     </div>
-    <div class="col-md-6">
-        <h4>Team Relationships</h4>
-        <ul class="list-group mb-3">
-            {% for dep in dependencies %}
-                <li class="list-group-item">
-                    {{ dep.from_team.name }} -> {{ dep.to_team.name }} ({{ dep.get_relation_type_display }})
-                </li>
-            {% empty %}
-                <li class="list-group-item">No dependencies recorded.</li>
-            {% endfor %}
-        </ul>
+    <div class="col-lg-6">
+        <div class="card mb-3">
+            <div class="card-header card-header-soft"><h5 class="mb-0">Team Relationships</h5></div>
+            <ul class="list-group list-group-flush">
+                {% for dep in dependencies %}
+                    <li class="list-group-item">
+                        <strong>{{ dep.from_team.name }}</strong>
+                        <span class="text-muted">&rarr; {{ dep.get_relation_type_display }} &rarr;</span>
+                        <strong>{{ dep.to_team.name }}</strong>
+                        {% if dep.notes %}<div class="text-muted small">{{ dep.notes }}</div>{% endif %}
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">
+                        <div class="empty-state">
+                            <i class="bi bi-share"></i>
+                            No dependencies recorded.
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="card">
+            <div class="card-header card-header-soft"><h5 class="mb-0">Team Types</h5></div>
+            <ul class="list-group list-group-flush">
+                {% for team_type in team_types %}
+                    <li class="list-group-item">
+                        <strong>{{ team_type.name }}</strong>
+                        {% if team_type.description %}<div class="text-muted small">{{ team_type.description }}</div>{% endif %}
+                    </li>
+                {% empty %}
+                    <li class="list-group-item text-muted">No team types defined.</li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 </div>
 {% endblock %}

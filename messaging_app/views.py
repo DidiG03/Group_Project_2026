@@ -48,10 +48,14 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
         if team_id:
             team = get_object_or_404(Team, pk=team_id)
             initial["subject"] = f"Update for {team.name}"
+            member_lines = "\n".join(
+                f"- {m.full_name} <{m.email}>" for m in team.members.all()
+            )
             initial["body"] = (
                 f"Hello {team.name} team,\n\n"
                 "Sharing an update here.\n\n"
-                "Thanks."
+                + (f"Team members on copy:\n{member_lines}\n\n" if member_lines else "")
+                + "Thanks."
             )
             if team.manager:
                 initial["recipients"] = [team.manager.pk]

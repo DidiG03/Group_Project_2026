@@ -36,6 +36,7 @@
                         <span class="badge bg-danger">{{ unread_notifications_count }}</span>
                     {% endif %}
                 </a>
+                <a class="nav-link {% if '/audit-log/' in request.path %}active{% endif %}" href="{% url 'audit_log' %}">Audit Log</a>
             </div>
             <div class="navbar-nav ms-auto">
                 {% if user.is_authenticated %}
